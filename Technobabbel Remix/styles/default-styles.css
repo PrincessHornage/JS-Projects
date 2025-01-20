@@ -1,0 +1,258 @@
+html, body{
+    height: 100%;
+    margin: 0;
+    
+}
+.container{ 
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: auto;
+}
+#home-page-img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 300px;
+    width: auto;
+    margin-top: 20px;
+}
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#title{
+    margin-top: 20px;
+    text-align: center;
+}
+
+/*Technobabbel Text Display*/
+#output {
+    padding-top: 40px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/*------- Media Queries --------
+Old Android
+@media only screen and (min-width: 240px){
+    .container {
+        display: flex; 
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    h1{
+        font-size: 1.2rem;
+        background-color: #026b0e;
+        color: #F5F5F5;
+        padding: .8rem;
+        margin: 0; 
+        text-align: center;
+    }
+
+    #output{
+        text-align: center;
+    }
+}
+Mobile
+@media only screen and (min-width: 320px){
+    .container {
+        display: flex; 
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+    h1{
+        font-size: 1.2rem;
+        background-color: #174287;
+        color: #F5F5F5;
+        padding: .8rem;
+        margin: 0; 
+        text-align: center;
+    }
+    #output{
+        text-align: center;
+    }
+    #myButton, #fiveBabble{
+        width: 100%;
+        padding: 5px;
+    }
+}
+Tablet
+@media only screen and (min-width: 768px){
+    h1{
+        font-size: 3rem;
+        background-color: #23D160;
+    }
+    #myButton, #fiveBabble{
+        width: 300px;
+        height: 75pt;
+        font-size: 1.5rem;
+    }
+    body{
+        color: darkgrey;
+        font-size: 2rem;
+    }
+    #output { 
+        font-size: 3.5rem;
+    }
+}
+Desktop
+@media only screen and (min-width: 1024px){
+    body {
+        font-size: 1rem;
+        text-align: left;
+    }
+    h1 {
+        background-color: #FF3860;
+        font-size: 1.9rem;
+    }
+
+   .container {
+     display: block;
+     margin: 1rem;
+    }
+
+   #output{
+     text-align: left;
+   }
+
+   #myButton, #fiveBabble{
+    width: 190px;
+    height: auto;
+    font-size: 1rem;
+    padding: 12px;
+   }
+}*/
+
+/*Settings Card*/
+#settings-card{
+    display: none;
+    margin: auto;
+    width: 50%;
+    margin-bottom: 10px;
+}
+
+
+/*---------- Buttons -----------*/
+#technobabble-button{
+    margin-top: 30px;
+    font-family: 'Chango';
+}
+#settings-btn{
+    width: 45px;
+}
+
+
+/*Radio Buttons*/
+#settings { 
+    display: inline-block;
+    align-items:baseline;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+/*Fonts*/
+.permanent-marker-regular {
+    font-family: "Permanent Marker", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+.matemasie-regular {
+    font-family: "Matemasie", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+.chango-regular {
+    font-family: "Chango", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+.playwrite-ar{
+  font-family: "Playwrite AR", cursive;
+  font-optical-sizing: auto;
+  font-weight: 150;
+  font-style: normal;
+}
+.annie-use-your-telescope-regular {
+    font-family: "Annie Use Your Telescope", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+.rubik-microbe-regular {
+    font-family: "Rubik Microbe", system-ui;
+    font-weight: 400;
+    font-style: normal;
+}
+.londrina-sketch-regular {
+    font-family: "Londrina Sketch", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+.griffy-regular {
+    font-family: "Griffy", system-ui;
+    font-weight: 400;
+    font-style: normal;
+}
+.rampart-one-regular {
+    font-family: "Rampart One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+.lacquer-regular {
+    font-family: "Lacquer", system-ui;
+    font-weight: 400;
+    font-style: normal;
+}
+.vast-shadow-regular {
+    font-family: "Vast Shadow", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+.playwrite-cl {
+  font-family: "Playwrite CL", cursive;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+} 
+.orbitron {
+  font-family: "Orbitron", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+.nixie-one-regular {
+    font-family: "Nixie One", system-ui;
+    font-weight: 400;
+    font-style: normal;
+}
+.cabin-sketch-regular {
+    font-family: "Cabin Sketch", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+.kalnia-glaze {
+  font-family: "Kalnia Glaze", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+.sacramento-regular {
+    font-family: "Sacramento", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+.shadows-into-light-regular {
+    font-family: "Shadows Into Light", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+.barlow-condensed-thin {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 100;
+    font-style: normal;
+}

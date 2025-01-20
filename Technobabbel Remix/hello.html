@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Annie+Use+Your+Telescope&family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Bungee+Tint&family=Cabin+Sketch:wght@400;700&family=Chango&family=Griffy&family=Kalnia+Glaze:wght@100..700&family=Lacquer&family=Londrina+Sketch&family=Matemasie&family=Nixie+One&family=Orbitron:wght@400..900&family=Permanent+Marker&family=Playwrite+AR:wght@100..400&family=Playwrite+CL:wght@100..400&family=Rampart+One&family=Rubik+Microbe&family=Sacramento&family=Shadows+Into+Light&family=Vast+Shadow&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
+	<link rel="stylesheet" href="styles/default-styles.css">
+    
+</head>
+<body>
+
+    <h1 class="title" id="title">Technobabble Generator</h1>
+
+    <!--Main Stuff-->
+    <div class="container">
+        <div class="img-container image">
+            <img src="images/technobabbel-home-img.png" id="home-page-img" alt="Man spouting nonsense">
+        </div>
+        <div class="center">
+            <button id="technobabble-button" class="button is-outlined is-primary" onclick="getBabble()">Get Technobabble!</button>
+        </div>
+
+        <div id="output" >Loading...</div>
+    </div>
+
+   
+
+    <!--Settings Card-->
+    <div class="card has-background-primary has-text-white" id="settings-card">
+        <header class="card-header">
+            <p class="card-header-title">Settings</p>
+        </header>
+        
+        <div class="card-content">
+          <div class="content">
+            <form id="colors" class="radios columns">
+                <div class="column">
+                    <input type="radio" id="red" name="font_color" value="Red">
+                    <label for="html">Red</label><br>
+                    <input type="radio" id="orange" name="font_color" value="Orange">
+                    <label for="css">Orange</label><br>
+                    <input type="radio" id="green" name="font_color" value="Green">
+                    <label for="css">Green</label><br>
+                    <input type="radio" id="blue" name="font_color" value="Blue">
+                    <label for="html">Blue</label><br>
+                    <input type="radio" id="black" name="font_color" value="Black">
+                    <label for="html">Black</label>
+                    <input type="radio" id="purple" name="font_color" value="Purple">
+                    <label for="html">Purple</label>
+                </div>
+                <div class="column">
+                    <form id="fonts">
+                        <input type="radio" id="orbitron" name="font_family" value="Orbitron">
+                        <label for="html">Orbitron</label><br>
+                        <input type="radio" id="times New Roman" name="font_family" value="Times New Roman">
+                        <label for="css">Times New Roman</label>
+                        <br>
+                        
+                    </form>
+                </div>
+                <div class="column">
+                    <span class="icon has-text-warning">
+                    </span>
+                    <p>
+                        Babbel Count:
+                        <input type="range" name="number" id="number_range" min="1" max="10" value="1" step="1"><label for="html"> <output id="value"></output></label>
+                    </p>
+                </div>
+                <!--Colors-->
+                
+            </form>
+          </div>
+        </div>
+
+        <footer class="card-footer">
+            <button class="button card-footer-item is-success" onclick="exitSettings()">
+                <span class="icon">
+                    <i class="fas fa-check"></i>
+                </span>
+                 <span class="is-text-light">Save Changes</span>
+            </button>
+            <button class="button card-footer-item is-danger">
+                <span class="icon">
+                    <i class="fas fa-ban"></i>
+                </span>
+                 <span class="is-text-light">Clear All</span>
+            </button>
+        </footer>
+    </div>
+
+    <div class="center">
+        <button class="button is-primary is-rounded" id="settings-btn" onclick="displaySettings()">
+            <span class="icon">
+                <i class="fas fa-cog"></i>
+            </span>
+        </button>
+    </div>
+
+    
+  
+    <script src="src/main.js"> </script>
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+</body>
+</html>
