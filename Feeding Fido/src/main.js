@@ -1,4 +1,8 @@
 import './style.css';
+import shibaSheet from "../public/assets/spritesheets/shiba-spritesheet.png"; 
+import labSheet from "../public/assets/spritesheets/chocolate-lab-spritesheet.png"; 
+import collieSheet from "../public/assets/spritesheets/collie-spritesheet.png"; 
+import yorkieSheet from "../public/assets/spritesheets/yorkie-spritesheet.png"; 
 import Phaser from 'phaser';
 /********************************/
 //Game UI
@@ -65,12 +69,9 @@ class GameScene extends Phaser.Scene{
   }
   //Loads assets
   preload() {
+
     console.log("Loading images...");
- 
-    // Load the images
-    console.log("Loading background image...");
     this.load.image("bg", "/assets/levelOne.png");
-    console.log("Background image load attempted");
     this.load.image("player", "/assets/playerSprite.png");
     this.load.image("apple", "/assets/apple.png");
     this.load.image("avocado", "/assets/avocado.png");
@@ -89,17 +90,32 @@ class GameScene extends Phaser.Scene{
     this.load.image("good", "/assets/goodParticleEffect.png");
     this.load.image("bad", "/assets/badParticleEffect.png");
 
-
-
+    //Spritesheet 
+    this.load.spritesheet("shiba", shibaSheet, {
+      frameWidth: 50,
+      frameHeight: 50
+    });
+    this.load.spritesheet("chocolate-lab", labSheet ,{
+      frameWidth: 64,
+      frameHeight: 64,
+    });
+    this.load.spritesheet("border-collie", collieSheet ,{
+      frameWidth: 64,
+      frameHeight: 64,
+    });
+    this.load.spritesheet("yorkie-terrier", yorkieSheet ,{
+      frameWidth: 64,
+      frameHeight: 64,
+    });
 
     // Adding a listener for load error
     this.load.on("loaderror", (file) => {
       console.error(`Failed to load ${file.key}`);
     });
-   
- 
+
+    //When all images are loaded...
     this.load.on("complete", () => {
-      console.log("Image loading complete.");
+      console.log("All images loaded");
  
       // Log the texture names manually
       const textureNames = Object.keys(this.textures.list);
@@ -108,7 +124,6 @@ class GameScene extends Phaser.Scene{
       textureNames.forEach(textureName => {
         console.log("Loaded texture:", textureName);
       });
-
 
       //Sorts the images into good/bad lists by name
       //For each texture...
@@ -119,10 +134,7 @@ class GameScene extends Phaser.Scene{
           if(texture === badFood){
             badFoodsAdded.push(texture);
           }
-
-
         });
-
 
         //Loops through goodFood list
         goodFoodList.forEach(goodFood => {
@@ -132,7 +144,6 @@ class GameScene extends Phaser.Scene{
           }
         });
 
-
       });
     });
   }
@@ -141,18 +152,55 @@ class GameScene extends Phaser.Scene{
    this.scene.pause("scene-game");//pauses game (add to pause btn later)
 
 
-  /*********************Images*******************/
+    /*********************Images*******************/
     //Backgound
     const bg = this.add.image(0,0,"bg").setOrigin(0,0);
     bg.setDisplaySize(sizes.width, sizes.height);
 
+    /******Sprite Sheets********/
+   
 
     /**********************Sprites Logic****************************/
-    //Player
-    this.player = this.physics.add.image(175, sizes.height,"player").setOrigin(0,0);
-    this.player.setDisplaySize(200,100); //scales image
+    //Player Animation 
+    this.anims.create({
+      key: 'sit',
+      frames: this.anims.generateFrameNumbers('shiba', {frames:[0,1,2,3]}), // Frames 0 to 10 (first row)
+      frameRate: 10,
+      repeat: -1  // Animation will loop indefinitely
+    })
+    this.anims.create({
+      key: 'snooze-sit',
+      frames: this.anims.generateFrameNumbers('shiba', {frames:[12,13,14]}), 
+      frameRate: 10,
+      repeat: -1  // Animation will loop indefinitely
+    })
+    this.anims.create({
+      key: 'turn',
+      frames: this.anims.generateFrameNumbers('shiba', {frames:[23,24,25,26,27,28,29]}), 
+      frameRate: 10,
+      repeat: -1  // Animation will loop indefinitely
+    })
+    this.anims.create({
+      key: 'pout',
+      frames: this.anims.generateFrameNumbers('shiba', {frames:[0,1,2,3]}), 
+      frameRate: 10,
+      repeat: -1  // Animation will loop indefinitely
+    })
+    this.anims.create({
+      key: 'scream',
+      frames: this.anims.generateFrameNumbers('shiba', {frames:[0,1,2,3]}), 
+      frameRate: 10,
+      repeat: -1  // Animation will loop indefinitely
+    })
+
+    this.player = this.add.sprite(400, 300,"shiba");//(xPos, yPos, spritesheetName)
+    this.player.anims.play("turn", true); //starts animation
+    this.physics.add.existing(this.player); 
+
+    //this.player = this.physics.add.image(175, sizes.height,"player").setOrigin(0,0);
+    this.player.setDisplaySize(100,100); //scales image
     this.player.setImmovable(true); //prevents other sprites from interacting
-    this.player.body.allowGravity = false;  //stops player from falling off screen
+    this.player.allowGravity = false;  //stops player from falling off screen
     this.player.setCollideWorldBounds(true);//Prevents player from leaving
     this.player.setY(sizes.height - (this.player.displayHeight - 5));
     this.player.setSize(this.player.displayWidth + 40, this.player.displayHeight)
@@ -160,19 +208,14 @@ class GameScene extends Phaser.Scene{
     //resizes hitbox
     this.cursor = this.input.keyboard.createCursorKeys(); //Keyboard controls
 
-
     this.target = this.physics.add
     .image(sizes.width / 2,0, goodFoodsAdded[this.getRandomGoodTxture()].toString()).setDisplaySize(foodSizes.width,foodSizes.height)
     .setOrigin(this.getRandomX(),0);
     this.target.setMaxVelocity(0,speedDown);
 
-
     this.badTarget = this.physics.add
     .image(sizes.width / 2, 0, badFoodsAdded[this.getRandomBadTxture()].toString()).setDisplaySize(foodSizes.width, foodSizes.height);
     this.badTarget.setMaxVelocity(0,speedDown);
-
-
-
 
     //Collisons
     this.physics.add.overlap(this.target, this.player, this.targetHit, null, this);
@@ -185,9 +228,7 @@ class GameScene extends Phaser.Scene{
       font: "25px Arial",
       fill: "#FFFFFF",
     });
-
-
-  //Timer
+    //Timer
     this.textTime = this.add.text(0, 10, "Time: 00", {
       font: "25px Arial",
       fill: "#FFFFFF",
@@ -204,8 +245,6 @@ class GameScene extends Phaser.Scene{
       duration: 100,
       emitting: false
     });
-
-
     this.badEmitter = this.add.particles(0,0,"bad", {
       speed: 100,
       gravityY: speedDown - 200,
@@ -296,9 +335,8 @@ class GameScene extends Phaser.Scene{
    
   }
  
-  /**
-   * Prevent overlap between good and bad food by checking their positions.
-   */
+  //Prevent overlap between good and bad food by checking their positions.
+   
   preventOverlap() {
     const badBounds = this.badTarget.getBounds();
     const goodBounds = this.target.getBounds();
@@ -312,9 +350,7 @@ class GameScene extends Phaser.Scene{
   }
  
  
-  /**
-   * Prevent overlap between good and bad food by checking their positions.
-   */
+ //Prevent overlap between good and bad food by checking their positions.
   preventOverlap() {
     // Check if the bounds of the bad and good food intersect
     if (Phaser.Geom.Intersects.RectangleToRectangle(this.badTarget.getBounds(), this.target.getBounds())){
