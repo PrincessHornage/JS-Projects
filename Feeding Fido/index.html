@@ -15,6 +15,7 @@
     <main>
       <canvas id="gameCanvas"></canvas>
 
+
       <!--Instructions Screen-->
       <div class="card" id="instructionsScreen">
         <div class="card-content">
@@ -30,21 +31,22 @@
             </button>
           </header>
 
+
           <!--Intro Text-->
           <div class="card-content">
             <div class="content  is-size-4" id="intro">
               <p>
                 You just got a new puppy and it looks like he's really hungry. It must be treat time!
-                Use the <strong>left</strong> and <strong>right</strong>  arrow keys on your keyboard to move your pup on the screen. 
+                Use the <strong>left</strong> and <strong>right</strong>  arrow keys on your keyboard to move your pup on the screen.
                 Catch all the good treats but watch out, some of the food is <strong><em>toxic!</em></strong>
-                How many toxic foods can you remember to avoid? 
-                <br>   
+                How many toxic foods can you remember to avoid?
+                <br>  
               </p>
             </div>
             <br/>
-            
+           
             <!--Arrow Images-->
-            <div class="content" id="arrowImgs"> 
+            <div class="content" id="arrowImgs">
               <div class="columns is-centered ">
                 <div class="column is-narrow">
                   <figure class="image is-128x128">
@@ -57,9 +59,11 @@
                   </figure>
                 </div>
 
+
               </div>
             </div>
             <hr/>
+
 
             <!--Toxic Food List-->
             <div class="content has-text-centered">
@@ -138,31 +142,34 @@
             </div>
           </div>
 
+
           <!--Back to top-->
           <footer class="card-footer">
             <a href="#" class="card-footer-item">Return to Top</a>
           </footer>
 
+
         </div>
       </div>
-      
+     
       <!--Options Screen-->
       <div class="card" id="optionsScreen">
         <div class="card-content">
           <header class="card-header">
             <p class="card-header-title is-size-2 is-centered">
-              
+             
               <span class="icon-text">
                 <span class="icon" style="margin-right: 10px;">
                   <i class="fa-solid fa-gears"></i>
                 </span>
                 <span>Options</span>
               </span>
-            
+           
             </p>
             <!--Close Card Button-->
           </header>
           <hr>
+
 
           <!--Settings-->
           <div class="card-content">
@@ -175,6 +182,7 @@
                       <img src="/assets/speaker.png" class="is-32x32 image" id="volumeBtnImg" alt="Volume On/Off">
                     </button>
                   </div>
+
 
                   <div class="cell">Sound EFX</div>
                   <div class="cell">
@@ -189,8 +197,9 @@
                 </div>
               </div>
             </div>
-            
+           
           </div>
+
 
           <!--Save Changes-->
           <footer class="card-footer">
@@ -198,6 +207,7 @@
           </footer>
         </div>
       </div>
+
 
       <!--Start Screen-->
       <div id="startScreen" class="gameUI content">
@@ -207,6 +217,7 @@
         <button id="creditsBtn" class="button is-rounded">Credits</button>
       </div>
 
+
       <!--Game Over Screen-->
       <div id="gameOverScreen" class="gameUI">
         <p>Game Over</p>
@@ -215,15 +226,18 @@
         <p>Hit refresh on you browser page to play again</p>
       </div>
 
+
       <!-- Help Button -->
       <button class="button is-ghost is-responsive js-modal-trigger" id="pauseBtn" data-target="pauseMenu">
         <img src="/assets/pause.png" class="image is-96x96" alt="Pause Game">
       </button>
 
+
     </main>
     <footer>Osaani Productions | Princess Hornage 2025</footer>
     <script type="module" src="src/main.js"></script>
     <script type="module" src="src/gameUI.js"></script>
+
 
     <div class="modal" id="pauseMenu">
       <div class="modal-background"></div>
@@ -243,6 +257,8 @@
         </footer>
       </div>
     </div>
+
+
 
 
   </body>
