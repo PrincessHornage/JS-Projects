@@ -209,7 +209,6 @@ class GameScene extends Phaser.Scene{
     this.player = this.physics.add.sprite(100, sizes.height-100,"shiba");//(xPos, yPos, spritesheetName)
     this.player.setY(sizes.height - (this.player.displayHeight / 2));//sets player pos to screen bottom 
     this.player.setAlpha(1); //ensures sprite visibility
-    //this.player = this.physics.add.image(175, sizes.height,"player").setOrigin(0,0);
     this.player.allowGravity = false;  //stops player from falling off screen
     this.player.setCollideWorldBounds(true);//Prevents player from leaving
     this.player.setDisplaySize(70,70); //scales image
@@ -267,8 +266,8 @@ class GameScene extends Phaser.Scene{
     });
 
     //Particles follow player pos
-    this.goodEmitter.startFollow(this.player, this.player.width / 8, this.player.height / 6, true);
-    this.badEmitter.startFollow(this.player, this.player.width / 8, this.player.height / 6, true);
+    //this.goodEmitter.startFollow(this.player, this.player.width / 8, this.player.height / 6, true);
+    //this.badEmitter.startFollow(this.player, this.player.width / 8, this.player.height / 6, true);
 
 
   }
@@ -309,48 +308,23 @@ class GameScene extends Phaser.Scene{
     }
   }
  
+  //When player collides with bad food...
   badTargetHit() {
-    // Ensure animation is playing when hit
-    this.player.anims.play("defeat", true); // Play the "defeat" animation
-  
-    // Reset bad target
     this.badTarget.setY(0);
     this.target.setVelocityY(speedDown);
-    this.badEmitter.start(); // Start bad particles effect
-  
-    // Reposition bad target to a random X position
+    this.badEmitter.start(); 
     this.badTarget.setX(this.getRandomX());
-    
-    // Decrease score when hit by bad food
     this.points--;
     this.textScore.setText(`Score: ${this.points}`);
-  
-    this.player.once('animationcomplete', (animation) => {
-      if (animation.key === "defeat") {
-        // After the "defeat" animation completes, switch back to walking animation
-        this.player.anims.play("walk", true);
-      }
-    });
   }
   
   //Collision Detection
   targetHit() {
-    this.player.anims.play("turn", true); 
-    this.target.setY(0);
-    this.target.setVelocityY(speedDown);
-    this.goodEmitter.start();
-    this.target.setTexture(goodFoodsAdded[this.getRandomGoodTxture()].toString()).setDisplaySize(foodSizes.width,foodSizes.height)
-    .setOrigin(0,0);
-    this.target.setX(this.getRandomX());
-    this.points++;
-    this.textScore.setText(`Score: ${this.points}`)
+    // Temporarily trigger animation on any frame
+      console.log("Target Hit"); 
+      this.player.anims.stop();
+      this.player.anims.play("turn", true);  // Check if this triggers
 
-    this.player.once('animationcomplete', (animation) => {
-      if (animation.key === "turn") {
-        // After the "defeat" animation completes, switch back to walking animation
-        this.player.anims.play("sit", true);
-      }
-    });
   }
   /**
   * Reposition food smoothly and avoid the flash. - from chatgpt 
