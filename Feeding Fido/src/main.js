@@ -1,8 +1,8 @@
 import './style.css';
-import shibaSheet from "../public/assets/spritesheets/shiba-spritesheet.png"; 
-import labSheet from "../public/assets/spritesheets/chocolate-lab-spritesheet.png"; 
-import collieSheet from "../public/assets/spritesheets/collie-spritesheet.png"; 
-import yorkieSheet from "../public/assets/spritesheets/yorkie-spritesheet.png"; 
+import shibaSheet from "/assets/spritesheets/shiba-spritesheet.png"; 
+import labSheet from "/assets/spritesheets/chocolate-lab-spritesheet.png"; 
+import collieSheet from "/assets/spritesheets/collie-spritesheet.png"; 
+import yorkieSheet from "/assets/spritesheets/yorkie-spritesheet.png"; 
 import Phaser from 'phaser';
 /********************************/
 //Game UI
@@ -14,9 +14,7 @@ const finalScore = document.querySelector("#gameEndScoreSpan ");
 const gameScreen = document.querySelector("#gameCanvas");
 const pauseBtn = document.querySelector("#pauseBtn");
 
-
 /**/
-
 
 const sizes = {//Canvas Dimensions
   width: 500,
@@ -45,7 +43,6 @@ const goodFoodList = [
   "bananas",
   "chicken-leg"
 ]
-
 
 const badFoodsAdded = [];
 const goodFoodsAdded = [];
@@ -90,7 +87,7 @@ class GameScene extends Phaser.Scene{
     this.load.image("good", "/assets/goodParticleEffect.png");
     this.load.image("bad", "/assets/badParticleEffect.png");
 
-    //Spritesheet 
+    //Spritesheets 
     this.load.spritesheet("shiba", shibaSheet, {
       frameWidth: 50,
       frameHeight: 50
@@ -149,8 +146,6 @@ class GameScene extends Phaser.Scene{
   }
   create(){
    /******* Game Logic *******/
-   this.scene.pause("scene-game");//pauses game (add to pause btn later)
-
 
     /*********************Images*******************/
     //Backgound
@@ -158,56 +153,75 @@ class GameScene extends Phaser.Scene{
     bg.setDisplaySize(sizes.width, sizes.height);
 
     /******Sprite Sheets********/
-   
 
     /**********************Sprites Logic****************************/
-    //Player Animation 
+    //Player Animation (Shiba )
+    //Sit 
     this.anims.create({
       key: 'sit',
-      frames: this.anims.generateFrameNumbers('shiba', {frames:[0,1,2,3]}), // Frames 0 to 10 (first row)
+      frames: this.anims.generateFrameNumbers('shiba', {frames:[0,1,2,3,11,12,13]}), // Frames 0 to 10 (first row)
       frameRate: 10,
       repeat: -1  // Animation will loop indefinitely
     })
-    this.anims.create({
-      key: 'snooze-sit',
-      frames: this.anims.generateFrameNumbers('shiba', {frames:[12,13,14]}), 
-      frameRate: 10,
-      repeat: -1  // Animation will loop indefinitely
-    })
+    //Turn 
     this.anims.create({
       key: 'turn',
-      frames: this.anims.generateFrameNumbers('shiba', {frames:[23,24,25,26,27,28,29]}), 
+      frames: this.anims.generateFrameNumbers('shiba', {frames:[22,23,24,25,26,27,28]}), 
       frameRate: 10,
-      repeat: -1  // Animation will loop indefinitely
+      repeat: 0 
     })
+    //Walk 
     this.anims.create({
-      key: 'pout',
-      frames: this.anims.generateFrameNumbers('shiba', {frames:[0,1,2,3]}), 
-      frameRate: 10,
+      key: 'walk',
+      frames: this.anims.generateFrameNumbers('shiba', {frames:[37,38,39,40]}), 
+      frameRate: 5,
       repeat: -1  // Animation will loop indefinitely
     })
+    //Celebrate
+    this.anims.create({
+      key: 'celebrate',
+      frames: this.anims.generateFrameNumbers('shiba', {frames:[44,45,46,47]}), 
+      frameRate: 8,
+      repeat: -1  // Animation will loop indefinitely
+    })
+    //Scream
     this.anims.create({
       key: 'scream',
-      frames: this.anims.generateFrameNumbers('shiba', {frames:[0,1,2,3]}), 
+      frames: this.anims.generateFrameNumbers('shiba', {frames:[55,56,57,58]}), 
+      frameRate: 7,
+      repeat: 0  // Animation will loop indefinitely
+    })
+    //Cry
+    this.anims.create({
+      key: 'cry',
+      frames: this.anims.generateFrameNumbers('shiba', {frames:[77,78,79,80,81]}), 
       frameRate: 10,
       repeat: -1  // Animation will loop indefinitely
     })
+    //Defeat
+    this.anims.create({
+      key: 'defeat',
+      frames: this.anims.generateFrameNumbers('shiba', {frames:[88,89,90]}), 
+      frameRate: 7,
+      repeat: 0 //Prevents loop 
+    })
 
-    this.player = this.add.sprite(400, 300,"shiba");//(xPos, yPos, spritesheetName)
-    this.player.anims.play("turn", true); //starts animation
-    this.physics.add.existing(this.player); 
-
+    this.player = this.physics.add.sprite(100, sizes.height-100,"shiba");//(xPos, yPos, spritesheetName)
+    this.player.setY(sizes.height - (this.player.displayHeight / 2));//sets player pos to screen bottom 
+    this.player.setAlpha(1); //ensures sprite visibility
     //this.player = this.physics.add.image(175, sizes.height,"player").setOrigin(0,0);
-    this.player.setDisplaySize(100,100); //scales image
-    this.player.setImmovable(true); //prevents other sprites from interacting
     this.player.allowGravity = false;  //stops player from falling off screen
     this.player.setCollideWorldBounds(true);//Prevents player from leaving
-    this.player.setY(sizes.height - (this.player.displayHeight - 5));
-    this.player.setSize(this.player.displayWidth + 40, this.player.displayHeight)
-    .setOffset(200, 250); //Sets hitbox to bottom of player
-    //resizes hitbox
+    this.player.setDisplaySize(70,70); //scales image
+    this.player.setImmovable(true); //prevents other sprites from interacting
+
+    //Hitbox adjustment
+    this.player.setSize(this.player.displayWidth / 2, this.player.displayHeight / 2)
+    .setOffset(10, 20); //Sets hitbox to bottom of player
+
     this.cursor = this.input.keyboard.createCursorKeys(); //Keyboard controls
 
+    //Foods 
     this.target = this.physics.add
     .image(sizes.width / 2,0, goodFoodsAdded[this.getRandomGoodTxture()].toString()).setDisplaySize(foodSizes.width,foodSizes.height)
     .setOrigin(this.getRandomX(),0);
@@ -236,8 +250,7 @@ class GameScene extends Phaser.Scene{
     //Change # to +/- game length
     this.timedEvent = this.time.delayedCall(40000, this.gameOver, [], this);
 
-
-    //Particle Effects
+    //***************Particle Effects***************
     this.goodEmitter = this.add.particles(0,0,"good", {
       speed: 100,
       gravityY: speedDown - 200,
@@ -249,12 +262,11 @@ class GameScene extends Phaser.Scene{
       speed: 100,
       gravityY: speedDown - 200,
       scale: 0.1,
-      duration: 200,
+      duration: 100,
       emitting: false
     });
 
-
-    //Lets particles follow player
+    //Particles follow player pos
     this.goodEmitter.startFollow(this.player, this.player.width / 8, this.player.height / 6, true);
     this.badEmitter.startFollow(this.player, this.player.width / 8, this.player.height / 6, true);
 
@@ -281,28 +293,68 @@ class GameScene extends Phaser.Scene{
    
     // Player Movement
     const { right, left } = this.cursor;
-   
     if (left.isDown) {
       this.player.setVelocityX(-this.playerSpeed);
+      this.player.anims.play("walk", true); //starts animation
+      this.player.setFlipX(false); 
+
     } else if (right.isDown) {
       this.player.setVelocityX(this.playerSpeed);
+      this.player.anims.play("walk", true); //starts animation
+      this.player.setFlipX(true); //ensures sprite is facing correct way
+
     } else {
       this.player.setVelocityX(0);
+      this.player.anims.play("sit",true); //idle animation
     }
   }
  
   badTargetHit() {
+    // Ensure animation is playing when hit
+    this.player.anims.play("defeat", true); // Play the "defeat" animation
+  
+    // Reset bad target
     this.badTarget.setY(0);
     this.target.setVelocityY(speedDown);
-    this.badEmitter.start();
+    this.badEmitter.start(); // Start bad particles effect
+  
+    // Reposition bad target to a random X position
     this.badTarget.setX(this.getRandomX());
-    this.points--; // Decrease points when bad food hits player
+    
+    // Decrease score when hit by bad food
+    this.points--;
     this.textScore.setText(`Score: ${this.points}`);
+  
+    this.player.once('animationcomplete', (animation) => {
+      if (animation.key === "defeat") {
+        // After the "defeat" animation completes, switch back to walking animation
+        this.player.anims.play("walk", true);
+      }
+    });
   }
- 
+  
+  //Collision Detection
+  targetHit() {
+    this.player.anims.play("turn", true); 
+    this.target.setY(0);
+    this.target.setVelocityY(speedDown);
+    this.goodEmitter.start();
+    this.target.setTexture(goodFoodsAdded[this.getRandomGoodTxture()].toString()).setDisplaySize(foodSizes.width,foodSizes.height)
+    .setOrigin(0,0);
+    this.target.setX(this.getRandomX());
+    this.points++;
+    this.textScore.setText(`Score: ${this.points}`)
+
+    this.player.once('animationcomplete', (animation) => {
+      if (animation.key === "turn") {
+        // After the "defeat" animation completes, switch back to walking animation
+        this.player.anims.play("sit", true);
+      }
+    });
+  }
   /**
-   * Reposition food smoothly and avoid the flash. - from chatgpt & Princess Hornage
-   */
+  * Reposition food smoothly and avoid the flash. - from chatgpt 
+  */
   repositionFood(food, foodList, randomTextureIndex) {
     // Hide the food while repositioning
     food.setAlpha(0);
@@ -332,11 +384,8 @@ class GameScene extends Phaser.Scene{
  
     // Update the score if needed
     this.textScore.setText(`Score: ${this.points}`);
-   
   }
- 
   //Prevent overlap between good and bad food by checking their positions.
-   
   preventOverlap() {
     const badBounds = this.badTarget.getBounds();
     const goodBounds = this.target.getBounds();
@@ -348,43 +397,10 @@ class GameScene extends Phaser.Scene{
       this.badTarget.setY(0); // Reset to top
     }
   }
- 
- 
- //Prevent overlap between good and bad food by checking their positions.
-  preventOverlap() {
-    // Check if the bounds of the bad and good food intersect
-    if (Phaser.Geom.Intersects.RectangleToRectangle(this.badTarget.getBounds(), this.target.getBounds())){
-      // If they overlap, move the bad target to a new position
-      this.badTarget.setX(this.getRandomX());
-      this.badTarget.setY(0); // Reset to top
-    }
-  }
- 
-
-
   /**************Helper Methods**************/
   //Returns random food pos
   getRandomX(){
     return Math.floor(Math.random() * (sizes.width - foodSizes.width));
-  }
-  //Collision Detection
-  targetHit() {
-    this.target.setY(0);
-    this.target.setVelocityY(speedDown);
-    this.goodEmitter.start();
-    this.target.setTexture(goodFoodsAdded[this.getRandomGoodTxture()].toString()).setDisplaySize(foodSizes.width,foodSizes.height)
-    .setOrigin(0,0);
-    this.target.setX(this.getRandomX());
-    this.points++;
-    this.textScore.setText(`Score: ${this.points}`)
-  }
-  badTargetHit() {
-    this.badTarget.setY(0);
-    this.target.setVelocityY(speedDown);
-    this.badEmitter.start();
-    this.badTarget.setX(this.getRandomX());
-    this.points--;
-    this.textScore.setText(`Score: ${this.points}`)
   }
   getRandomGoodTxture() {
    return Math.floor(Math.random() * goodFoodsAdded.length);
@@ -434,10 +450,7 @@ const config = {
   },
   scene:[GameScene]
 }
-
-
 const game = new Phaser.Game(config)
-
 
 //Button Events
 gameStartBtn.addEventListener("click", () => {
