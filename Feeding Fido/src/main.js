@@ -201,7 +201,7 @@ class GameScene extends Phaser.Scene{
       key: 'defeat',
       frames: this.anims.generateFrameNumbers('shiba', {frames:[88,89,90]}), 
       frameRate: 7,
-      repeat: 0 //Prevents loop 
+      repeat: 1 //Prevents loop 
     })
 
     this.player = this.physics.add.sprite(100, sizes.height-100,"shiba");//(xPos, yPos, spritesheetName)
@@ -324,12 +324,20 @@ class GameScene extends Phaser.Scene{
   /**************Helper Methods**************/
   //When player collides with bad food...
   badTargetHit() {
+    this.player.anims.play("defeat", true); 
+    this.badTarget.setAlpha(0);
     this.badTarget.setY(0);
     this.target.setVelocityY(speedDown);
     this.badEmitter.start(); 
     this.badTarget.setX(this.getRandomX());
+    this.badTarget.setAlpha(1);
     this.points--;
     this.textScore.setText(`Score: ${this.points}`);
+    this.player.on('animationcomplete', (animation) => {
+      if(animation.key === "defeat") {
+        this.player.anims.play("sit", true); 
+      }
+    });
   }
   
   //Collision Detection
@@ -342,7 +350,7 @@ class GameScene extends Phaser.Scene{
     this.target.setAlpha(1); 
     this.points++; 
     this.textScore.setText(`Score: ${this.points}`); 
-    this.player.on('animationcomplete', (animation, frame) => {
+    this.player.on('animationcomplete', (animation) => {
       if(animation.key === "turn") {
         this.player.anims.play("sit", true); 
       }
