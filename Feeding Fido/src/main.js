@@ -11,7 +11,6 @@ const gameStartBtn = document.querySelector("#startGameBtn");
 const gameEndDiv = document.querySelector("#gameOverScreen");
 const gameResults = document.querySelector("#gameWinLoseSpan");
 const finalScore = document.querySelector("#gameEndScoreSpan ");
-const gameScreen = document.querySelector("#gameCanvas");
 const pauseBtn = document.querySelector("#pauseBtn");
 const sizes = {//Canvas Dimensions
   width: 500,
@@ -40,14 +39,12 @@ const goodFoodList = [
   "bananas",
   "chicken-leg"
 ]
-const badFoodsAdded = [];
-const goodFoodsAdded = [];
-
 
 class GameScene extends Phaser.Scene{
   constructor(){//Game Variables
     super("scene-game");
     this.player;
+    this.health = 100; 
     this.cursor;
     this.playerSpeed = speedDown + 50;
     this.target;
@@ -59,7 +56,6 @@ class GameScene extends Phaser.Scene{
     this.remainingTime;
     this.goodEmitter;
     this.badEmitter;
-    this.isHit = false;
   }
   //Loads assets
   preload() {
@@ -117,27 +113,7 @@ class GameScene extends Phaser.Scene{
       textureNames.forEach(textureName => {
         console.log("Loaded texture:", textureName);
       });
-
-      //Sorts the images into good/bad lists by name
-      //For each texture...
-      textureNames.forEach(texture => {
-        //Loop through badFoods list
-        badFoodList.forEach(badFood => {
-          //if its on it, add it to the appropriate list
-          if(texture === badFood){
-            badFoodsAdded.push(texture);
-          }
-        });
-
-        //Loops through goodFood list
-        goodFoodList.forEach(goodFood => {
-          //if its on it, add it to the appropriate list
-          if(texture === goodFood){
-            goodFoodsAdded.push(texture);
-          }
-        });
-
-      });
+     
     });
   }
   create(){
@@ -221,18 +197,17 @@ class GameScene extends Phaser.Scene{
 
     //Foods 
     this.target = this.physics.add
-    .image(sizes.width / 2,0, goodFoodsAdded[this.getRandomGoodTxture()].toString()).setDisplaySize(foodSizes.width,foodSizes.height)
+    .image(sizes.width / 2,0, goodFoodList[this.getRandomGoodTxture()].toString()).setDisplaySize(foodSizes.width,foodSizes.height)
     .setOrigin(this.getRandomX(),0);
     this.target.setMaxVelocity(0,speedDown);
 
     this.badTarget = this.physics.add
-    .image(sizes.width / 2, 0, badFoodsAdded[this.getRandomBadTxture()].toString()).setDisplaySize(foodSizes.width, foodSizes.height);
+    .image(sizes.width / 2, 0, badFoodList[this.getRandomBadTxture()].toString()).setDisplaySize(foodSizes.width, foodSizes.height);
     this.badTarget.setMaxVelocity(0,speedDown);
 
     //Collisons
     this.physics.add.overlap(this.target, this.player, this.targetHit, null, this);
     this.physics.add.overlap(this.badTarget, this.player, this.badTargetHit, null, this);
-
 
     /************Game UI ***********/
     //Score
@@ -279,13 +254,13 @@ class GameScene extends Phaser.Scene{
    
     // Food Movement for good target
     if (this.target.y >= sizes.height) {
-      this.repositionFood(this.target, goodFoodsAdded, this.getRandomGoodTxture());
+      this.repositionFood(this.target, goodFoodList, this.getRandomGoodTxture());
     }
    
     // Food Movement for bad target
     if (this.badTarget.y >= sizes.height) {
       // Only increment score if bad food has already passed the bottom
-      this.repositionFood(this.badTarget, badFoodsAdded, this.getRandomBadTxture());
+      this.repositionFood(this.badTarget, badFoodList, this.getRandomBadTxture());
       this.textScore.setText(`Score: ${this.points}`);
     }
    
@@ -304,7 +279,6 @@ class GameScene extends Phaser.Scene{
       this.animateWalk(this.cursor); 
     }
   }
-
   //Animates player movements 
   animateWalk(cursor){
     const { right, left } = cursor;
@@ -320,7 +294,6 @@ class GameScene extends Phaser.Scene{
       this.player.anims.play("sit", true); 
     }
   }
-
   /**************Helper Methods**************/
   //When player collides with bad food...
   badTargetHit() {
@@ -339,7 +312,6 @@ class GameScene extends Phaser.Scene{
       }
     });
   }
-  
   //Collision Detection
   targetHit() {
     this.player.anims.play("turn", true);  // Trigger the turn animation
@@ -403,15 +375,13 @@ class GameScene extends Phaser.Scene{
   getRandomX(){
     return Math.floor(Math.random() * (sizes.width - foodSizes.width));
   }
-
   //Returns random foood textures 
   getRandomGoodTxture() {
-   return Math.floor(Math.random() * goodFoodsAdded.length);
+   return Math.floor(Math.random() * goodFoodList.length);
   }
   getRandomBadTxture() {
-    return Math.floor(Math.random() * badFoodsAdded.length);
+    return Math.floor(Math.random() * badFoodList.length);
   }
-
   //Win/Lose Conditions
   gameOver(){
     this.sys.game.destroy(true);//removes and destroys scene
@@ -430,7 +400,6 @@ class GameScene extends Phaser.Scene{
     gameEndDiv.style.display = "flex";
     pauseBtn.style.display = "none";
   }
-
   //Leave Game 
   quitGame(){
     this.sys.game.destroy(true);//removes and destroys scene
@@ -454,19 +423,15 @@ const config = {
   },
   scene:[GameScene]
 }
-const game = new Phaser.Game(config)
+const game = new Phaser.Game(config); 
+export {game}; 
+
 //Button Events
-gameStartBtn.addEventListener("click", () => {
-  gameStartDiv.style.display = "none";
-  gameScreen.style.display = "flex";
-  pauseBtn.style.display = "flex";
-  game.scene.resume("scene-game");
-});
+
 //Pause Button
 pauseBtn.addEventListener("click", () => {
   game.scene.pause("scene-game");
   pauseBtn.style.display = "none";
- 
 });
 /*Pause Menu Modal*/
 document.addEventListener('DOMContentLoaded', () => {
@@ -474,15 +439,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function openModal($el) {
     $el.classList.add('is-active');
   }
-
-
   function closeModal($el) {
     $el.classList.remove('is-active');
     pauseBtn.style.display = "flex"; //redisplays pause button
     game.scene.resume("scene-game");
   }
-
-
   function closeAllModals() {
     (document.querySelectorAll('.modal') || []).forEach(($modal) => {
       closeModal($modal);
@@ -500,8 +461,6 @@ document.addEventListener('DOMContentLoaded', () => {
       openModal($target);
     });
   });
-
-
   // Add a click event on various child elements to close the parent modal
   (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
     const $target = $close.closest('.modal');
@@ -511,8 +470,6 @@ document.addEventListener('DOMContentLoaded', () => {
       closeModal($target);
     });
   });
-
-
   // Add a keyboard event to close all modals
   document.addEventListener('keydown', (event) => {
     if(event.key === "Escape") {

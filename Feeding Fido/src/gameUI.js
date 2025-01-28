@@ -1,32 +1,34 @@
-const instructionsBtn = document.querySelector("#instructionsBtn");
+import {game} from "./main.js"; 
+
+//Screens
 const instructionsScreen = document.querySelector("#instructionsScreen");
-const creditsBtn = document.querySelector("#creditsBtn");
-const optionsBtn = document.querySelector("#optionsBtn");
 const optionsScreen = document.querySelector("#optionsScreen");
 const startScreen = document.querySelector("#startScreen");
-const gameTitle = document.querySelector("#gameTitle");
-
-
-const closeInstBtn = document.querySelector("#closeBtn");
-const volumeBtnImg = document.querySelector("#volumeBtnImg");
-const volumeBtn = document.querySelector("#volumeBtn");
-const efxBtnImg = document.querySelector("#efxBtnImg");
-const efxBtn = document.querySelector("#efxBtn");
-const saveSettingsBtn = document.querySelector("#saveSettingsBtn");
-const fullScreenBtn = document.querySelector("#fullscreenBtn");
-
-
+const gameScreen = document.querySelector("#gameCanvas");
 const gameStartDiv = document.querySelector("#startScreen");
-const gameStartBtn = document.querySelector("#startGameBtn");
 const gameEndDiv = document.querySelector("#gameOverScreen");
+
+//Text
+const gameTitle = document.querySelector("#gameTitle");
 const gameResults = document.querySelector("#gameWinLoseSpan");
 const finalScore = document.querySelector("#gameEndScoreSpan");
-const gameScreen = document.querySelector("#gameCanvas");
 
+//Buttons 
+const restartBtn = document.querySelector("#restartBtn"); 
+const quitBtn = document.querySelector("#quitBtn"); 
+const creditsBtn = document.querySelector("#creditsBtn");
+const optionsBtn = document.querySelector("#optionsBtn");
+const instructionsBtn = document.querySelector("#instructionsBtn");
+const gameStartBtn = document.querySelector("#startGameBtn");
+const closeInstBtn = document.querySelector("#closeBtn");
+const saveSettingsBtn = document.querySelector("#saveSettingsBtn");
+const efxBtn = document.querySelector("#efxBtn");
+const efxBtnImg = document.querySelector("#efxBtnImg");
+const volumeBtnImg = document.querySelector("#volumeBtnImg");
+const volumeBtn = document.querySelector("#volumeBtn");
+const fullScreenBtn = document.querySelector("#fullscreenBtn");
 
-//efxBtnImg
-
-
+//Click Counters 
 let volClicks = 0; //Button click count
 let efxVolClicks = 0; //Button click count
 let fsClicks = 0;
@@ -41,6 +43,8 @@ creditsBtn.addEventListener("click", ()=> {
 
     //Hide all other screens
     startScreen.style.display = "none";
+    gameEndDiv.style.display = "none";
+    gameResults.style.display = "none";
     //Display credits screen
 
 
@@ -74,16 +78,11 @@ optionsBtn.addEventListener("click", ()=> {
 });
 //Returns to main menu
 closeInstBtn.addEventListener("click", ()=> {
-
-
     //Hide all other screens
     startScreen.style.display = "flex";
     gameTitle.style.display = "flex";
     instructionsScreen.style.display = "none";
-
-
 });
-
 
 //Applies all settings to game and returns to main title
 saveSettingsBtn.addEventListener("click", () => {
@@ -91,9 +90,6 @@ saveSettingsBtn.addEventListener("click", () => {
     startScreen.style.display = "flex";
     gameTitle.style.display = "flex";
 });
-
-
-
 
 //Volume On/Off Buttons
 //Switches image to match audio state
@@ -116,7 +112,6 @@ efxBtn.addEventListener("click", ()=> {
     }
 });
 
-
 fullScreenBtn.addEventListener("click", ()=> {
     fsClicks++;
     if(fsClicks === 1){
@@ -125,4 +120,29 @@ fullScreenBtn.addEventListener("click", ()=> {
         fullScreenBtn.innerHTML = "Enabled"
         fsClicks = 0;
     }
+});
+
+gameStartBtn.addEventListener("click", () => {
+    gameStartDiv.style.display = "none";
+    gameScreen.style.display = "flex";
+    pauseBtn.style.display = "flex";
+    game.scene.start("scene-game");
+});
+
+restartBtn.addEventListener("mouseenter", () => {
+    restartBtn.classList.add("is-focused");
+}); 
+
+restartBtn.addEventListener("mouseleave", () => {
+    restartBtn.classList.remove("is-focused");
+
+}); 
+
+quitBtn.addEventListener("mouseenter", () => {
+    quitBtn.classList.add("is-inverted");
+
+});
+
+quitBtn.addEventListener("mouseleave", () => {
+    quitBtn.classList.remove("is-inverted");
 });

@@ -77,8 +77,6 @@ main{
  margin-left: 100px;
  margin-right: 100px;
 }
-
-
 #optionsScreen{
   max-width: 100%;  /* Limit the max width of the container */
   width: 700px;      /* Ensure it doesn't exceed the available width */
@@ -88,8 +86,6 @@ main{
   box-sizing: border-box;
   height: fit-content;
 }
-
-
 #toxicList{
   text-align: center;
   margin-left: 60px;
@@ -97,8 +93,6 @@ main{
 #gameTitle{
   font-size: clamp(25px, 2vw + 1rem, 50px);/*(mix, preff, max)*/
 }
-
-
 #pauseBtn{
   width: fit-content;
   height: fit-content;
@@ -110,13 +104,18 @@ main{
   left: 20px;                   /* Positions the button 20px from the left edge */
   z-index: 1000;
 }
-
-
+#pauseScreenBtns{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+}
+#pauseScreenBtn{
+  display: block;
+}
 
 
 /*Media Queries*/
-
-
 /*Mobile S (320x)*/
 /*Mobile M (375x)*/
 /*Mobile L (425x)*/

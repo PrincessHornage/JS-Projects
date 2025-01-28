@@ -238,7 +238,7 @@
     <script type="module" src="src/main.js"></script>
     <script type="module" src="src/gameUI.js"></script>
 
-
+    <!--Pause Game Screen -->
     <div class="modal" id="pauseMenu">
       <div class="modal-background"></div>
       <div class="modal-card">
@@ -247,19 +247,33 @@
           <button class="delete" aria-label="close"></button>
         </header>
         <section class="modal-card-body">
-          <!-- Content ... -->
-        </section>
-        <footer class="modal-card-foot">
-          <div class="buttons">
-            <button class="button is-success">Save changes</button>
-            <button class="button">Cancel</button>
+          <div class="fixed-grid has-2-cols has-text-centered">
+            <div class="grid">
+              <div class="cell">Background Music</div>
+              <div class="cell">
+                <button class="button has-background-white" id="volumeBtn">
+                  <img src="/assets/speaker.png" class="is-32x32 image" id="volumeBtnImg" alt="Volume On/Off">
+                </button>
+              </div>
+              <div class="cell">SFX</div>
+              <div class="cell">
+                <button class="button has-background-white" id="efxBtn">
+                  <img src="/assets/speaker.png" class="is-32x32 image" id="efxBtnImg" alt="Sound EFX Volume On/Off">
+                </button>
+              </div>
+            </div>
+            <div id="pauseScreenBtns">
+              <div class="block">
+                <button class="button is-rounded is-medium pauseScreenBtn" id="restartBtn">Restart</button>
+              </div>
+              <div class="block">
+                <button class="button is-rounded is-medium is-danger is-outlined pauseScreenBtn" id="quitBtn">Quit</button>
+              </div>
+            </div>
           </div>
-        </footer>
+          
+        </section>
       </div>
     </div>
-
-
-
-
   </body>
 </html>
