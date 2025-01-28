@@ -13,9 +13,6 @@ const gameResults = document.querySelector("#gameWinLoseSpan");
 const finalScore = document.querySelector("#gameEndScoreSpan ");
 const gameScreen = document.querySelector("#gameCanvas");
 const pauseBtn = document.querySelector("#pauseBtn");
-
-/**/
-
 const sizes = {//Canvas Dimensions
   width: 500,
   height: 500
@@ -43,7 +40,6 @@ const goodFoodList = [
   "bananas",
   "chicken-leg"
 ]
-
 const badFoodsAdded = [];
 const goodFoodsAdded = [];
 
@@ -63,10 +59,10 @@ class GameScene extends Phaser.Scene{
     this.remainingTime;
     this.goodEmitter;
     this.badEmitter;
+    this.isHit = false;
   }
   //Loads assets
   preload() {
-
     console.log("Loading images...");
     this.load.image("bg", "/assets/levelOne.png");
     this.load.image("player", "/assets/playerSprite.png");
@@ -146,6 +142,7 @@ class GameScene extends Phaser.Scene{
   }
   create(){
    /******* Game Logic *******/
+   game.scene.pause();//Prevents game from running in background 
 
     /*********************Images*******************/
     //Backgound
@@ -168,14 +165,15 @@ class GameScene extends Phaser.Scene{
       key: 'turn',
       frames: this.anims.generateFrameNumbers('shiba', {frames:[22,23,24,25,26,27,28]}), 
       frameRate: 10,
-      repeat: 0 
+      repeat: 1,
+       
     })
     //Walk 
     this.anims.create({
       key: 'walk',
       frames: this.anims.generateFrameNumbers('shiba', {frames:[37,38,39,40]}), 
-      frameRate: 5,
-      repeat: -1  // Animation will loop indefinitely
+      frameRate: 10,
+      repeat: 0,  
     })
     //Celebrate
     this.anims.create({
@@ -213,6 +211,7 @@ class GameScene extends Phaser.Scene{
     this.player.setCollideWorldBounds(true);//Prevents player from leaving
     this.player.setDisplaySize(70,70); //scales image
     this.player.setImmovable(true); //prevents other sprites from interacting
+    this.player.anims.play("sit", true); 
 
     //Hitbox adjustment
     this.player.setSize(this.player.displayWidth / 2, this.player.displayHeight / 2)
@@ -254,20 +253,20 @@ class GameScene extends Phaser.Scene{
       speed: 100,
       gravityY: speedDown - 200,
       scale: 0.1,
-      duration: 100,
+      duration: 50,
       emitting: false
     });
     this.badEmitter = this.add.particles(0,0,"bad", {
       speed: 100,
       gravityY: speedDown - 200,
       scale: 0.1,
-      duration: 100,
+      duration: 50,
       emitting: false
     });
 
     //Particles follow player pos
-    //this.goodEmitter.startFollow(this.player, this.player.width / 8, this.player.height / 6, true);
-    //this.badEmitter.startFollow(this.player, this.player.width / 8, this.player.height / 6, true);
+    this.goodEmitter.startFollow(this.player, this.player.width / 8, this.player.height / 6, true);
+    this.badEmitter.startFollow(this.player, this.player.width / 8, this.player.height / 6, true);
 
 
   }
@@ -294,20 +293,35 @@ class GameScene extends Phaser.Scene{
     const { right, left } = this.cursor;
     if (left.isDown) {
       this.player.setVelocityX(-this.playerSpeed);
-      this.player.anims.play("walk", true); //starts animation
-      this.player.setFlipX(false); 
-
-    } else if (right.isDown) {
+      this.animateWalk(this.cursor); 
+    } 
+    else if (right.isDown) {
       this.player.setVelocityX(this.playerSpeed);
-      this.player.anims.play("walk", true); //starts animation
-      this.player.setFlipX(true); //ensures sprite is facing correct way
+      this.animateWalk(this.cursor); 
 
     } else {
       this.player.setVelocityX(0);
-      this.player.anims.play("sit",true); //idle animation
+      this.animateWalk(this.cursor); 
     }
   }
- 
+
+  //Animates player movements 
+  animateWalk(cursor){
+    const { right, left } = cursor;
+    if (left.isDown && this.player.body.velocity != 0 ) {
+      this.player.anims.play("walk", true); 
+      this.player.setFlipX(false); 
+
+    } else if (right.isDown) {
+      this.player.anims.play("walk", true); 
+      this.player.setFlipX(true); //ensures sprite is facing correct way
+
+    } else if(this.player.body.velocity === 0){
+      this.player.anims.play("sit", true); 
+    }
+  }
+
+  /**************Helper Methods**************/
   //When player collides with bad food...
   badTargetHit() {
     this.badTarget.setY(0);
@@ -320,15 +334,21 @@ class GameScene extends Phaser.Scene{
   
   //Collision Detection
   targetHit() {
-    // Temporarily trigger animation on any frame
-      console.log("Target Hit"); 
-      this.player.anims.stop();
-      this.player.anims.play("turn", true);  // Check if this triggers
-
+    this.player.anims.play("turn", true);  // Trigger the turn animation
+    this.target.setAlpha(0); 
+    this.target.setY(0); 
+    this.goodEmitter.start(); 
+    this.target.setX(this.getRandomX()); 
+    this.target.setAlpha(1); 
+    this.points++; 
+    this.textScore.setText(`Score: ${this.points}`); 
+    this.player.on('animationcomplete', (animation, frame) => {
+      if(animation.key === "turn") {
+        this.player.anims.play("sit", true); 
+      }
+    });
   }
-  /**
-  * Reposition food smoothly and avoid the flash. - from chatgpt 
-  */
+  //Reposition food smoothly and avoid the flash. - from chatgpt 
   repositionFood(food, foodList, randomTextureIndex) {
     // Hide the food while repositioning
     food.setAlpha(0);
@@ -371,20 +391,22 @@ class GameScene extends Phaser.Scene{
       this.badTarget.setY(0); // Reset to top
     }
   }
-  /**************Helper Methods**************/
   //Returns random food pos
   getRandomX(){
     return Math.floor(Math.random() * (sizes.width - foodSizes.width));
   }
+
+  //Returns random foood textures 
   getRandomGoodTxture() {
    return Math.floor(Math.random() * goodFoodsAdded.length);
   }
   getRandomBadTxture() {
     return Math.floor(Math.random() * badFoodsAdded.length);
   }
+
+  //Win/Lose Conditions
   gameOver(){
     this.sys.game.destroy(true);//removes and destroys scene
-
 
     //Win/Lose Conditions
     if(this.points >= 10){
@@ -400,6 +422,8 @@ class GameScene extends Phaser.Scene{
     gameEndDiv.style.display = "flex";
     pauseBtn.style.display = "none";
   }
+
+  //Leave Game 
   quitGame(){
     this.sys.game.destroy(true);//removes and destroys scene
     pauseBtn.style.display = "none"; //hides pause button
@@ -407,8 +431,6 @@ class GameScene extends Phaser.Scene{
     gameStartBtn.style.display = "flex";
   }
 }
-
-
 //Game Configurations
 const config = {
   type: Phaser.WEBGL,
@@ -425,7 +447,6 @@ const config = {
   scene:[GameScene]
 }
 const game = new Phaser.Game(config)
-
 //Button Events
 gameStartBtn.addEventListener("click", () => {
   gameStartDiv.style.display = "none";
